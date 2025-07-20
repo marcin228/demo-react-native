@@ -5,8 +5,7 @@ import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import Calendar from '@/components/calendar/Calendar';
-import moment from 'moment';
+import CalendarWithControls from '@/components/calendar/CalendarWithControls/CalendarWithControls'
 
 export default function HomeScreen() {
   return (
@@ -23,12 +22,7 @@ export default function HomeScreen() {
         <HelloWave />
       </ThemedView>
 
-
-      <Calendar
-        from={moment("2025-08-01")}
-        offerDays={['2025-08-10','2025-08-11','2025-08-12','2025-08-15','2025-08-17','2025-08-18']}
-        orderDays={[]}
-      />
+      <CalendarWithControls />
 
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">Twoje zadanie</ThemedText>
