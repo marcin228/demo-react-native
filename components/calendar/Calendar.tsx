@@ -1,11 +1,10 @@
-import moment, { Moment } from "moment";
 import React, { useState } from "react";
 import { ActivityIndicator, Pressable, StyleSheet, View } from "react-native";
 import { ThemedText } from "../ThemedText";
 import { useOrderRequest } from "@/hooks/useOrderRequest";
 import { useThemeColor } from "@/hooks/useThemeColor";
 export interface WeekViewProps {
-  readonly from: Moment;
+  readonly from: Date;
   readonly offerDays: string[];
   readonly orderDays: string[];
 }
@@ -126,32 +125,41 @@ export default function MonthView({
     },
   });
 
-
   const [width, setWidth] = useState<number>(0);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const { submitOrder, loading } = useOrderRequest();
   
-  // TODO: don't use momentjs - it's obsolete - switch to other library
-  const monthStart = moment(from).startOf("month");
-  const monthEnd = moment(from).endOf("month");
+  const fromDate = new Date(from);
+  const monthStart = new Date(fromDate.getFullYear(), fromDate.getMonth(), 1);
+  const monthEnd = new Date(fromDate.getFullYear(), fromDate.getMonth() + 1, 0);
 
-  const firstMonday = moment(monthStart).startOf("week");
-  const lastSunday = moment(monthEnd).endOf("week");
+  const firstMonday = new Date(monthStart);
+  const dayOffset = (firstMonday.getDay() + 6) % 7;
+  firstMonday.setDate(firstMonday.getDate() - dayOffset);
 
-  const day = moment(firstMonday);
+  const lastSunday = new Date(monthEnd);
+  const endOffset = (7 - lastSunday.getDay()) % 7;
+  lastSunday.setDate(lastSunday.getDate() + endOffset);
+
+  const day = new Date(firstMonday);
   const days: MonthDay[] = [];
 
-  while (day.isSameOrBefore(lastSunday)) {
+  while (day <= lastSunday) {
+    const dateStr = day.toISOString().split("T")[0];
+    const today = new Date();
+    const isSameDay = day.toDateString() === today.toDateString();
+    const isSameMonth = day.getMonth() === from.getMonth() && day.getFullYear() === from.getFullYear();
+
     days.push({
-      day: day.format("DD"),
-      date: day.format(DayFormat),
-      today: day.isSame(moment(), "day"),
-      offer: offerDays.includes(day.format(DayFormat)),
-      order: orderDays.includes(day.format(DayFormat)),
-      isCurrentMonth: day.isSame(from, "month"),
+      day: String(day.getDate()).padStart(2, "0"),
+      date: dateStr,
+      today: isSameDay,
+      offer: offerDays.includes(dateStr),
+      order: orderDays.includes(dateStr),
+      isCurrentMonth: isSameMonth,
     });
 
-    day.add(1, "day");
+    day.setDate(day.getDate() + 1);
   }
 
   const weeks: MonthDay[][] = [];

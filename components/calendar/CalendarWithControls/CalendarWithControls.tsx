@@ -1,14 +1,12 @@
-import moment from "moment";
 import Calendar from '@/components/calendar/Calendar';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from "react";
-import { CalendarUtil } from "@/utils/CalendarUtil";
 import { LANGUAGES } from "@/types/types";
 
 const CalendarWithControls = () => {
   
-  const [currentDate, setCurrentDate] = useState(moment());
+  const [currentDate, setCurrentDate] = useState(new Date());
 
   /**
    * Updates the current calendar date by adding or subtracting a specified number of months.
@@ -23,10 +21,11 @@ const CalendarWithControls = () => {
    * changeMonthBy(1); // Moves currentDate forward by one month
    * changeMonthBy(-1); // Moves currentDate backward by one month
    */
-  function changeMonthBy(numberOfMonths: number) {
-    const newDate = moment(currentDate).add(numberOfMonths, 'months');
-    setCurrentDate(newDate);
-  }
+function changeMonthBy(numberOfMonths: number) {
+  const date = new Date(currentDate);
+  date.setMonth(date.getMonth() + numberOfMonths);
+  setCurrentDate(date);
+}
 
   return (
     <View> 
@@ -37,7 +36,7 @@ const CalendarWithControls = () => {
             <Ionicons name="chevron-back" size={20} color="black" />
           </TouchableOpacity>
 
-          <Text style={{ marginHorizontal: 10 }}>{`${CalendarUtil.getMonthLocalized(currentDate.format('MMMM'), LANGUAGES.PL)} ${currentDate.format("YYYY")}`}</Text>
+          <Text style={{ marginHorizontal: 10 }}>{`${new Intl.DateTimeFormat(LANGUAGES.PL, { month: 'long' }).format(currentDate)} ${currentDate.getFullYear()}`}</Text>
 
           <TouchableOpacity 
             onPress={() => changeMonthBy(1)}
