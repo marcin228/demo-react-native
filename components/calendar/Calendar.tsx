@@ -1,8 +1,8 @@
 import moment, { Moment } from "moment";
 import React, { useState } from "react";
-import { Pressable, StyleSheet, View } from "react-native";
+import { ActivityIndicator, Pressable, StyleSheet, View } from "react-native";
 import { ThemedText } from "../ThemedText";
-
+import { useOrderRequest } from "@/hooks/useOrderRequest";
 export interface WeekViewProps {
   readonly from: Moment;
   readonly offerDays: string[];
@@ -32,6 +32,7 @@ export default function MonthView({
 }: WeekViewProps) {
   const [width, setWidth] = useState<number>(0);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const { submitOrder, loading } = useOrderRequest();
   
   // TODO: don't use momentjs - it's obsolete - switch to other library
   const monthStart = moment(from).startOf("month");
@@ -138,6 +139,9 @@ export default function MonthView({
         <ThemedText style={{ marginBottom: 10 }}>
           Zaznaczono: {selectedDate}
         </ThemedText>
+        {loading ? (
+        <ActivityIndicator size="small" color="#000000" />
+      ) : (
         <Pressable
           style={{
             padding: 10,
@@ -146,11 +150,12 @@ export default function MonthView({
             alignItems: "center",
           }}
           onPress={() => {
-
+            submitOrder(selectedDate);
           }}
         >
           <ThemedText style={{ color: "white" }}>Wyślij</ThemedText>
         </Pressable>
+      )}
       </View>)}
 
     </View>

@@ -7,7 +7,7 @@ import { CalendarUtil } from "@/utils/CalendarUtil";
 import { LANGUAGES } from "@/types/types";
 
 const CalendarWithControls = () => {
-
+  
   const [currentDate, setCurrentDate] = useState(moment());
 
   /**
