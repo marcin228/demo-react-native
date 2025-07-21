@@ -1,6 +1,6 @@
 import moment, { Moment } from "moment";
 import React, { useState } from "react";
-import { Alert, Pressable, StyleSheet, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 import { ThemedText } from "../ThemedText";
 
 export interface WeekViewProps {
@@ -97,8 +97,6 @@ export default function MonthView({
               key={d.date}
             >
 
-            { /* TODO: Add ability to select day, mark selected day on the calendar.
-            Display day details below the calendar */}
               <Pressable
                 style={{
                   ...styles.touchableBox,
@@ -148,7 +146,7 @@ export default function MonthView({
             alignItems: "center",
           }}
           onPress={() => {
-            
+
           }}
         >
           <ThemedText style={{ color: "white" }}>Wyślij</ThemedText>
