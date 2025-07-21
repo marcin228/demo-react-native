@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { ActivityIndicator, Pressable, StyleSheet, View } from "react-native";
 import { ThemedText } from "../ThemedText";
 import { useOrderRequest } from "@/hooks/useOrderRequest";
+import { useThemeColor } from "@/hooks/useThemeColor";
 export interface WeekViewProps {
   readonly from: Moment;
   readonly offerDays: string[];
@@ -18,11 +19,6 @@ interface MonthDay {
   isCurrentMonth: boolean;
 }
 
-// TODO: use color theme 
-const blue = "#0070ff";
-const lightBlue = "#4688eb";
-const orange = "#ffaa2a";
-
 export const DayFormat = "YYYY-MM-DD";
 
 export default function MonthView({
@@ -30,6 +26,107 @@ export default function MonthView({
   orderDays,
   offerDays,
 }: WeekViewProps) {
+
+  const blue = useThemeColor({}, 'blue');
+  const lightBlue = useThemeColor({}, 'lightBlue');
+  const orange = useThemeColor({}, 'orange');
+
+  const styles = StyleSheet.create({
+    status: {
+      position: "absolute",
+      borderRadius: 5,
+      width: 15,
+      aspectRatio: 1,
+    },
+    unavailable: {
+      opacity: 0.5,
+    },
+    ordered: {
+      top: -3,
+      right: -3,
+      backgroundColor: lightBlue,
+    },
+    orderedUnpaid: {
+      top: -3,
+      right: -3,
+      backgroundColor: orange,
+    },
+    cancelled: {
+      bottom: -3,
+      left: -3,
+      backgroundColor: "#666",
+    },
+    added: {
+      bottom: -3,
+      right: -3,
+      backgroundColor: blue,
+    },
+    orderedText: {
+      fontSize: 10,
+      textAlign: "center",
+      fontFamily: "poppins-bold",
+      color: "#fff",
+    },
+    days: {
+      marginVertical: 2,
+      marginHorizontal: 2,
+      alignSelf: "stretch",
+    },
+    weekHeader: {
+      flexDirection: "row",
+    },
+    weekRow: {
+      flexDirection: "row",
+    },
+    dayText: {
+      textAlign: "center",
+      fontSize: 13,
+    },
+    weekDayName: {
+      textAlign: "center",
+      color: "#aaa",
+      fontFamily: "poppins-bold",
+      textTransform: "uppercase",
+      fontSize: 8,
+    },
+    selectedDay: {
+      borderWidth: 2,
+      borderColor: blue,
+    },
+    today: {
+      color: "#555",
+    },
+    todayBackground: {
+      borderWidth: 1,
+      borderRadius: 4,
+      borderColor: blue,
+    },
+    touchableBox: {
+      backgroundColor: "#f6f6f6",
+      aspectRatio: 1,
+      borderRadius: 4,
+      borderWidth: 1,
+      borderColor: "#f6f6f6",
+      justifyContent: "center",
+    },
+    dayBox: {
+      justifyContent: "center",
+      marginHorizontal: 0,
+    },
+    otherMonthDay: {
+      backgroundColor: "#f0f0f0",
+      borderColor: "#f0f0f0",
+      opacity: 0.4,
+    },
+    noOfferDay: {
+      opacity: 0.4,
+    },
+    otherMonthText: {
+      color: "#ccc",
+    },
+  });
+
+
   const [width, setWidth] = useState<number>(0);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const { submitOrder, loading } = useOrderRequest();
@@ -161,98 +258,3 @@ export default function MonthView({
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  status: {
-    position: "absolute",
-    borderRadius: 5,
-    width: 15,
-    aspectRatio: 1,
-  },
-  unavailable: {
-    opacity: 0.5,
-  },
-  ordered: {
-    top: -3,
-    right: -3,
-    backgroundColor: lightBlue,
-  },
-  orderedUnpaid: {
-    top: -3,
-    right: -3,
-    backgroundColor: orange,
-  },
-  cancelled: {
-    bottom: -3,
-    left: -3,
-    backgroundColor: "#666",
-  },
-  added: {
-    bottom: -3,
-    right: -3,
-    backgroundColor: blue,
-  },
-  orderedText: {
-    fontSize: 10,
-    textAlign: "center",
-    fontFamily: "poppins-bold",
-    color: "#fff",
-  },
-  days: {
-    marginVertical: 2,
-    marginHorizontal: 2,
-    alignSelf: "stretch",
-  },
-  weekHeader: {
-    flexDirection: "row",
-  },
-  weekRow: {
-    flexDirection: "row",
-  },
-  dayText: {
-    textAlign: "center",
-    fontSize: 13,
-  },
-  weekDayName: {
-    textAlign: "center",
-    color: "#aaa",
-    fontFamily: "poppins-bold",
-    textTransform: "uppercase",
-    fontSize: 8,
-  },
-  selectedDay: {
-    borderWidth: 2,
-    borderColor: blue,
-  },
-  today: {
-    color: "#555",
-  },
-  todayBackground: {
-    borderWidth: 1,
-    borderRadius: 4,
-    borderColor: blue,
-  },
-  touchableBox: {
-    backgroundColor: "#f6f6f6",
-    aspectRatio: 1,
-    borderRadius: 4,
-    borderWidth: 1,
-    borderColor: "#f6f6f6",
-    justifyContent: "center",
-  },
-  dayBox: {
-    justifyContent: "center",
-    marginHorizontal: 0,
-  },
-  otherMonthDay: {
-    backgroundColor: "#f0f0f0",
-    borderColor: "#f0f0f0",
-    opacity: 0.4,
-  },
-  noOfferDay: {
-    opacity: 0.4,
-  },
-  otherMonthText: {
-    color: "#ccc",
-  },
-});
