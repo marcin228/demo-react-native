@@ -1,6 +1,6 @@
 import moment, { Moment } from "moment";
 import React, { useState } from "react";
-import { Pressable, StyleSheet, View } from "react-native";
+import { Alert, Pressable, StyleSheet, View } from "react-native";
 import { ThemedText } from "../ThemedText";
 
 export interface WeekViewProps {
@@ -134,6 +134,27 @@ export default function MonthView({
           ))}
         </View>
       ))}
+
+      {selectedDate && (
+      <View style={{ padding: 10 }}>
+        <ThemedText style={{ marginBottom: 10 }}>
+          Zaznaczono: {selectedDate}
+        </ThemedText>
+        <Pressable
+          style={{
+            padding: 10,
+            backgroundColor: blue,
+            borderRadius: 6,
+            alignItems: "center",
+          }}
+          onPress={() => {
+            
+          }}
+        >
+          <ThemedText style={{ color: "white" }}>Wyślij</ThemedText>
+        </Pressable>
+      </View>)}
+
     </View>
   );
 }
