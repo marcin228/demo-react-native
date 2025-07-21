@@ -4,9 +4,9 @@ import { Pressable, StyleSheet, View } from "react-native";
 import { ThemedText } from "../ThemedText";
 
 export interface WeekViewProps {
-  from: Moment;
-  offerDays: string[];
-  orderDays: string[];
+  readonly from: Moment;
+  readonly offerDays: string[];
+  readonly orderDays: string[];
 }
 
 interface MonthDay {
@@ -31,7 +31,8 @@ export default function MonthView({
   offerDays,
 }: WeekViewProps) {
   const [width, setWidth] = useState<number>(0);
-
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  
   // TODO: don't use momentjs - it's obsolete - switch to other library
   const monthStart = moment(from).startOf("month");
   const monthEnd = moment(from).endOf("month");
@@ -107,7 +108,12 @@ export default function MonthView({
                     ? styles.todayBackground
                     : {}),
                 }}
-                onPress={() => {}}
+                onPress={() => {
+                  //Alert.alert('PRESSED' + d);
+                  if (d.isCurrentMonth) {
+                    setSelectedDate(d.date);
+                  }
+                }}
               >
                 <View style={styles.dayBox}>
                   {d.isCurrentMonth && (
@@ -116,6 +122,7 @@ export default function MonthView({
                         ...styles.dayText,
                         ...(d.today ? { fontWeight: "bold", color: blue } : {}),
                         ...(d.isCurrentMonth ? {} : styles.otherMonthText),
+                        ...(selectedDate === d.date ? styles.selectedDay : {})
                       }}
                     >
                       {d.day}
